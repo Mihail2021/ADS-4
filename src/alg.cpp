@@ -1,65 +1,66 @@
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
 #include <cassert>
 template<typename T>
 class TPQueue {
 private:
-    T* arr;
-    int size;
-    int begin,
-        end;
-    int count;
+T* arr;
+int size;
+int begin, end;
+int count;
+int stepBack(int index) {
+int res = --index;
+if (res < 0)
+res += size + 1;
+return res;
+}
+int stepForward(int index) {
+int res = ++index;
+if (res > size)
+res -= size + 1;
+return res;
+}
 public:
-    TPQueue(int = 100);
-TPQueue();
-    ~TPQueue();
-
-    void push(const T&);
-    T pop();
-    T get() const;
-    bool isEmpty() const;
-    bool isFull() const;
-};
-template<typename T> TPQueue<T>::TPQueue(int sizeQueue) : size(sizeQueue),
-template<typename T> TPQueue<T>::TPQueue() : size(100),
+TPQueue() :
+size(100),
 begin(0), end(0), count(0) {
-    arr = new T[size + 1];
+arr = new T[size + 1];
 }
-@@ -42,8 +41,7 @@ template<typename T> void TPQueue<T>::push(const T& item) {
-                continue;
-            }
-        }
-    }
-    else {
-    } else {
-        arr[begin] = item;
-    }
-    count++;
-    end++;
+~TPQueue() {
+delete[] arr;
 }
-template<typename T> T TPQueue<T>::pop() {
-    assert(count > 0);
-    T item = arr[begin++];
-    count--;
-    if (begin > size)
-        begin -= size + 1;
-    return item;
+void push(const T & item) {
+assert(count < size);
+int cur = end;
+while (begin != cur && item.prior > arr[stepBack(cur)].prior) {
+arr[cur] = arr[stepBack(cur)];
+cur = stepBack(cur);
 }
-template<typename T>
-T TPQueue<T>::get() const {
-    assert(count > 0);
-    return arr[begin];
+arr[cur] = item;
+end = stepForward(end);
+count++;
 }
-template<typename T>
-bool TPQueue<T>::isEmpty() const {
-    return count == 0;
+T pop() {
+assert(count > 0);
+T item = arr[begin];
+count--;
+begin = stepForward(begin);
+return item;
 }
-template<typename T>
-bool TPQueue<T>::isFull() const {
-    return count == size;
+T get() const {
+assert(count > 0);
+return arr[begin];
 }
-struct SYM {
-    char ch;
-    int  prior;
+bool isEmpty() const {
+return count == 0;
+}
+bool isFull() const {
+return count == size;
+}
 };
-#endif// Copyright 2021 NNTU-CS
+struct SYM {
+char ch;
+int  prior;
+};
+#endif // INCLUDE_TPQUEUE_H_
