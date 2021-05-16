@@ -4,32 +4,33 @@
 #include <cassert>
 template<typename T>
 class TPQueue {
-private:
-T* arr;
-int size;
-int begin, end;
-int count;
-int stepBack(int index) {
-int res = --index;
-if (res < 0)
-res += size + 1;
-return res;
-}
-int stepForward(int index) {
-int res = ++index;
-if (res > size)
-res -= size + 1;
-return res;
-}
-public:
-TPQueue() :
-size(100),
-begin(0), end(0), count(0) {
-arr = new T[size + 1];
-}
-~TPQueue() {
-delete[] arr;
-}
+ private:
+  T* arr;
+  int size;
+  int begin, end;
+  int count;
+  int stepBack(int index) {
+  int res = --index;
+  if (res < 0)
+  res += size + 1;
+  return res;
+  }
+  int stepForward(int index) {
+  int res = ++index;
+  if (res > size)
+  res -= size + 1;
+  return res;
+  }
+  
+ public:
+  TPQueue() :
+  size(100),
+  begin(0), end(0), count(0) {
+  arr = new T[size + 1];
+  }
+  ~TPQueue() {
+  delete[] arr;
+  }
 void push(const T & item) {
 assert(count < size);
 int cur = end;
