@@ -21,7 +21,7 @@ class TPQueue {
   res -= size + 1;
   return res;
   }
-  
+
  public:
   TPQueue() :
   size(100),
